@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kevinnzou.web"
+    namespace = "com.philippkutsch.web"
     compileSdk = 34
 
     defaultConfig {
@@ -64,8 +64,8 @@ dependencies {
 publishing {
     publications {
         create("release", MavenPublication::class) {
-            groupId = "io.github.kevinnzou"
-            artifactId = "compose-webview"
+            groupId = "com.philippkutsch"
+            artifactId = "web"
             version = "0.33.6"
 
             afterEvaluate {
