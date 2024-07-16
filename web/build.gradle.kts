@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.vanniktech.maven.publish")
+    id("maven-publish")
 }
 
 android {
@@ -37,6 +37,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -54,7 +61,16 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 
-mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01, automaticRelease = true)
-    signAllPublications()
+publishing {
+    publications {
+        create("release", MavenPublication::class) {
+            groupId = "io.github.kevinnzou"
+            artifactId = "compose-webview"
+            version = "0.33.6"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
