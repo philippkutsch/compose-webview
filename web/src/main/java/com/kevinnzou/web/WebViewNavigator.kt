@@ -63,6 +63,8 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
                 return result
             }
         }
+
+        data class EvaluateJavascript(val script: String) : NavigationEvent
     }
 
     private val navigationEvents: MutableSharedFlow<NavigationEvent> = MutableSharedFlow(replay = 1)
@@ -89,6 +91,10 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
 
                 is NavigationEvent.PostUrl -> {
                     postUrl(event.url, event.postData)
+                }
+
+                is NavigationEvent.EvaluateJavascript -> {
+                    evaluateJavascript(event.script, null)
                 }
 
                 else -> {}
@@ -179,6 +185,13 @@ public class WebViewNavigator(private val coroutineScope: CoroutineScope) {
      */
     public fun stopLoading() {
         coroutineScope.launch { navigationEvents.emit(NavigationEvent.StopLoading) }
+    }
+
+    /**
+     * Run javascript
+     */
+    fun evaluateJavascript(script: String) {
+        coroutineScope.launch { navigationEvents.emit(NavigationEvent.EvaluateJavascript(script)) }
     }
 }
 
